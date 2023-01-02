@@ -18,6 +18,7 @@ const sendToKore = (url: string, token: string, message: any) => {
       Authorization: `Bearer ${token}`,
     },
   });
+  fetch;
   return data;
 
   //  Promise 코드 입니다

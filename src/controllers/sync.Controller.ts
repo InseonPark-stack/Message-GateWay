@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import jwtGenerater from "../utils/jwtGenerater";
 import sendToKore from "../services/sendToKore";
 import TemplateText from "../templates/template.Text";
+import winston from "../configs/winston";
 
 dotenv.config();
 
@@ -20,7 +21,6 @@ declare let process: {
  * userId는 방 번호로 진행하면 될듯
  */
 const callback: RequestHandler = async (req, res) => {
-  console.log(req.body.test);
   const url = process.env.KORE_AI_CALLBACK_URL;
   const koreMessage = {
     session: {
@@ -38,7 +38,7 @@ const callback: RequestHandler = async (req, res) => {
   };
   const tokenKore = jwtGenerater.getKoreJwtToken();
   const data = await sendToKore.sendToKore(url, tokenKore, koreMessage);
-  console.log(data.data);
+  winston.logger.debug(JSON.stringify(data.data));
   // data 가지고 Proxy에 전송하는 서비스 만들면 된다.
   callProxy(data.data.type, data.data.val);
 
